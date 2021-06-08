@@ -39,7 +39,7 @@
 yarn-debug.log*
 .yarn-integrity
 
-
 .browserslistrc
 /config/credentials.yml.enc
 /config/database.yml
+test/
