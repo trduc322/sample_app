@@ -31,3 +31,7 @@
 
 en:
   hello: "Hello world"
+  base_title: "Ruby on Rails Tutorial Sample App"
+  home: "Home"
+  help: "Help"
+  login: "Log in"
