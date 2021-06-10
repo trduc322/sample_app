@@ -1,0 +1,5 @@
+user:
+  username_length: 50
+  valid_email_regex: !ruby/regexp '/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i'
+  email_username_length: 255
+  password_min_length: 6
