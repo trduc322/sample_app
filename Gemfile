@@ -27,6 +27,10 @@ gem "bcrypt", "~> 3.1.13"
 
 gem "config"
 
+gem "will_paginate", "3.1.8"
+
+gem "bootstrap-will_paginate", "1.0.0"
+
 group :development, :test do
   gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
 end

@@ -5,7 +5,7 @@ class User < ApplicationRecord
   validates :name, presence: true, length: { maximum: Settings.user.username_length }
   validates :email, presence: true, length: { maximum: Settings.user.email_username_length },
     format: { with: VALID_EMAIL_REGEX }, uniqueness: true
-  validates :password, presence: true, length: { minimum: Settings.user.password_min_length }
+  validates :password, presence: true, length: { minimum: Settings.user.password_min_length }, allow_nil: true
   before_save { self.email = email.downcase }
   def User.digest string
     cost = if ActiveModel::SecurePassword.min_cost
@@ -23,6 +23,7 @@ class User < ApplicationRecord
     update_column :remember_digest, User.digest(remember_token)
   end
   def authenticated? remember_token
+    return false unless remember_digest
     BCrypt::Password.new(remember_digest).is_password? remember_token
   end
   def forget

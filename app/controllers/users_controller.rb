@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
-  def show
-    @user = User.find_by id: params[:id]
-    return if @user
-    render file: "#{Rails.root}/public/404.html", layout: false, status: 404
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+  before_action :load_user, only: [:show, :edit, :update, :destroy]
+  before_action :correct_user, only: [:edit, :update]
+  def index
+    @users = User.paginate(page: params[:page])
   end
+  def show; end
   def new
     @user = User.new
   end
@@ -17,9 +19,41 @@ class UsersController < ApplicationController
       render :new
     end
   end
+  def edit; end
+  def update
+    if @user.update(user_params)
+      flash[:success] = t("profile_update")
+      redirect_to @user
+    else
+      render "edit"
+    end
+  end
+  def destroy
+    if @user.admin? && @user.destroy
+      flash[:success] = t("user_deleted")
+    else
+      flash[:danger] = t("delete_fail")
+    end
+    redirect_to users_url
+  end
 
   private
+  def load_user
+    @user = User.find_by id: params[:id]
+    return if @user
+    render file: "#{Rails.root}/public/404.html", layout: false, status: 404
+  end
   def user_params
     params.require(:user).permit :name, :email, :password, :password_confirmation
+  end
+  def logged_in_user
+    unless logged_in?
+      store_location
+      flash[:danger] = t("pls_login")
+      redirect_to login_url
+    end
+  end
+  def correct_user
+    redirect_to(root_url) unless current_user?(@user)
   end
 end
